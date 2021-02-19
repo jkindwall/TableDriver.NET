@@ -38,7 +38,7 @@ namespace TableDriver.Elements
         {
             get
             {
-                return this.Element.FindElements(By.XPath("/d")).Count;
+                return this.Element.FindElements(By.XPath("td")).Count;
             }
         }
 
@@ -49,7 +49,7 @@ namespace TableDriver.Elements
         {
             get
             {
-                int precedingRowCount = this.Element.FindElements(By.XPath("/preceding-sibling::tr")).Count;
+                int precedingRowCount = this.Element.FindElements(By.XPath("preceding-sibling::tr")).Count;
                 return precedingRowCount - this.SkipRows;
             }
         }
@@ -58,10 +58,10 @@ namespace TableDriver.Elements
         /// Gets all TableCells in the row
         /// </summary>
         /// <returns>Collection of TableCells representing all cells in the row</returns>
-        public IReadOnlyCollection<TableCell> GetCells()
+        public ReadOnlyCollection<TableCell> GetCells()
         {
             IList<TableCell> tableCells = this.Element
-                .FindElements(By.XPath("/td"))
+                .FindElements(By.XPath("td"))
                 .Select((e, i) => new TableCell(e, i, this.SkipRows))
                 .ToList();
             return new ReadOnlyCollection<TableCell>(tableCells);
@@ -92,7 +92,7 @@ namespace TableDriver.Elements
         public TableCell FindCell(int columnIndex)
         {
             int xpathCellIndex = columnIndex + 1;
-            return new TableCell(this.Element.FindElement(By.XPath($"/td[{xpathCellIndex}]")), columnIndex, this.SkipRows);
+            return new TableCell(this.Element.FindElement(By.XPath($"td[{xpathCellIndex}]")), columnIndex, this.SkipRows);
         }
     }
 }

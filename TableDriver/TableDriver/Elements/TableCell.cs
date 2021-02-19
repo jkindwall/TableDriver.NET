@@ -39,7 +39,7 @@ namespace TableDriver.Elements
         {
             get
             {
-                int precedingRowCount = this.Element.FindElements(By.XPath("/../preceding-sibling::tr")).Count;
+                int precedingRowCount = this.Element.FindElements(By.XPath("../preceding-sibling::tr")).Count;
                 return precedingRowCount - this.SkipRows;
             }
         }

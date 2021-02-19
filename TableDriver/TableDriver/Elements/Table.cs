@@ -30,36 +30,36 @@ namespace TableDriver.Elements
 
         private static (IWebElement HeaderRow, int SkipRows) TryFindHeaderRow(IWebElement element)
         {
-            IList<IWebElement> theadRows = element.FindElements(By.XPath("/thead/tr"));
+            IList<IWebElement> theadRows = element.FindElements(By.XPath("thead/tr"));
             if (theadRows.Any())
             {
                 return (theadRows.Last(), 0);
             }
 
-            IList<IWebElement> thRows = element.FindElements(By.XPath("/tbody/tr[th] | /tr[th]"));
+            IList<IWebElement> thRows = element.FindElements(By.XPath("tbody/tr[th] | tr[th]"));
             if (thRows.Any())
             {
                 return (thRows.Last(), thRows.Count());
             }
 
-            return (element.FindElement(By.XPath("/tbody/tr[1] | /tr[1]")), 1);
+            return (element.FindElement(By.XPath("tbody/tr[1] | tr[1]")), 1);
         }
 
         private static string BuildRowXPathPrefix(IWebElement element, int skipRows)
         {
             StringBuilder builder = new();
-            if (element.FindElements(By.XPath("/tbody")).Any())
+            if (element.FindElements(By.XPath("tbody")).Any())
             {
-                builder.Append("/tbody");
+                builder.Append("tbody/");
             }
 
             if (skipRows > 0)
             {
-                builder.Append($"/tr[{skipRows}]/following-sibling::tr");
+                builder.Append($"tr[{skipRows}]/following-sibling::tr");
             }
             else
             {
-                builder.Append("/tr");
+                builder.Append("tr");
             }
 
             return builder.ToString();
@@ -71,7 +71,7 @@ namespace TableDriver.Elements
             if (this.HeaderRow == null)
             {
                 IList<IWebElement> columns = this.Element.FindElements(
-                    By.XPath($"{this.RowXPathPrefix}tr/th | {this.RowXPathPrefix}tr/td"));
+                    By.XPath($"{this.RowXPathPrefix}[1]/th | {this.RowXPathPrefix}[1]/td"));
                 for (int i = 0; i < columns.Count; i++)
                 {
                     string indexText = i.ToString();
@@ -80,7 +80,7 @@ namespace TableDriver.Elements
             }
             else
             {
-                IList<IWebElement> headerElements = this.HeaderRow.FindElements(By.XPath("/td | /th"));
+                IList<IWebElement> headerElements = this.HeaderRow.FindElements(By.XPath("td | th"));
                 int columnIndex = 0;
                 foreach (IWebElement headerElement in headerElements)
                 {
@@ -160,6 +160,18 @@ namespace TableDriver.Elements
         }
 
         /// <summary>
+        /// Gets the specified row in the table
+        /// </summary>
+        /// <param name="rowIndex">Index of the row</param>
+        /// <returns>TableRow representing the specified row in the table</returns>
+        public TableRow FindRow(int rowIndex)
+        {
+            string rowXPath = this.BuildXPath(rowIndex);
+            IWebElement rowElement = this.Element.FindElement(By.XPath(rowXPath));
+            return new TableRow(rowElement, this.Headers, this.SkipRows);
+        }
+
+        /// <summary>
         /// Gets all rows in the table that matches the specified rowQuery string
         /// </summary>
         /// <param name="rowQuery">A RowQuery string identifying one or more rows by their contents</param>
@@ -202,7 +214,40 @@ namespace TableDriver.Elements
         {
             string rowXPath = this.BuildXPath(rowQuery);
             int xpathCellIndex = columnIndex + 1;
-            string cellXPath = $"{rowXPath}/td[{xpathCellIndex}]";
+            string cellXPath = $"({rowXPath})/td[{xpathCellIndex}]";
+            IWebElement cellElement = this.Element.FindElement(By.XPath(cellXPath));
+            return new TableCell(cellElement, columnIndex, this.SkipRows);
+        }
+
+        /// <summary>
+        /// Gets the cell in the specified column from the specified row
+        /// </summary>
+        /// <param name="rowIndex">Index of the row</param>
+        /// <param name="columnHeaderText">Identifies the column under which to find cells by the column's header text</param>
+        /// <returns>TableCell representing the cell under the specified column from the specified row</returns>
+        public TableCell FindCell(int rowIndex, string columnHeaderText)
+        {
+            if (!this.Headers.ContainsKey(columnHeaderText))
+            {
+                throw new ArgumentException(
+                    $"The table does not contain a column with the header caption of '{columnHeaderText}'.",
+                    nameof(columnHeaderText));
+            }
+
+            return this.FindCell(rowIndex, this.Headers[columnHeaderText]);
+        }
+
+        /// <summary>
+        /// Gets the cell in the specified column from the specified row
+        /// </summary>
+        /// <param name="rowIndex">Index of the row</param>
+        /// <param name="columnIndex">Identifies the column under which to find cells by the column's index</param>
+        /// <returns>TableCell representing the cell under the specified column from the specified row</returns>
+        public TableCell FindCell(int rowIndex, int columnIndex)
+        {
+            string rowXPath = this.BuildXPath(rowIndex);
+            int xpathCellIndex = columnIndex + 1;
+            string cellXPath = $"({rowXPath})/td[{xpathCellIndex}]";
             IWebElement cellElement = this.Element.FindElement(By.XPath(cellXPath));
             return new TableCell(cellElement, columnIndex, this.SkipRows);
         }
@@ -235,12 +280,18 @@ namespace TableDriver.Elements
         {
             string rowXPath = this.BuildXPath(rowQuery);
             int xpathCellIndex = columnIndex + 1;
-            string cellXPath = $"{rowXPath}/td[{xpathCellIndex}]";
+            string cellXPath = $"({rowXPath})/td[{xpathCellIndex}]";
             IList<TableCell> tableCells = this.Element
                 .FindElements(By.XPath(cellXPath))
                 .Select((e, i) => new TableCell(e, i, this.SkipRows))
                 .ToList();
             return new ReadOnlyCollection<TableCell>(tableCells);
+        }
+
+        private string BuildXPath(int rowIndex)
+        {
+            int xpathRowIndex = rowIndex + 1;
+            return $"{this.RowXPathPrefix}[{xpathRowIndex}]";
         }
 
         private string BuildXPath(string rowQuery)
@@ -338,7 +389,7 @@ namespace TableDriver.Elements
             }
 
             int xpathIndex = headerIndex + 1;
-            return this.HeaderRow.FindElement(By.XPath($"(/td | /th)[{xpathIndex}]"));
+            return this.HeaderRow.FindElement(By.XPath($"(td | th)[{xpathIndex}]"));
         }
     }
 }
