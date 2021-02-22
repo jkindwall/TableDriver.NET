@@ -38,7 +38,7 @@ namespace TableDriver.Elements
         {
             get
             {
-                return this.Element.FindElements(By.XPath("td")).Count;
+                return this.Element.FindElements(By.XPath("th | td")).Count;
             }
         }
 
@@ -61,7 +61,7 @@ namespace TableDriver.Elements
         public ReadOnlyCollection<TableCell> GetCells()
         {
             IList<TableCell> tableCells = this.Element
-                .FindElements(By.XPath("td"))
+                .FindElements(By.XPath("th | td"))
                 .Select((e, i) => new TableCell(e, i, this.SkipRows))
                 .ToList();
             return new ReadOnlyCollection<TableCell>(tableCells);
@@ -92,7 +92,10 @@ namespace TableDriver.Elements
         public TableCell FindCell(int columnIndex)
         {
             int xpathCellIndex = columnIndex + 1;
-            return new TableCell(this.Element.FindElement(By.XPath($"td[{xpathCellIndex}]")), columnIndex, this.SkipRows);
+            return new TableCell(
+                this.Element.FindElement(By.XPath($"*[self::th or self::td][{xpathCellIndex}]")), 
+                columnIndex, 
+                this.SkipRows);
         }
     }
 }

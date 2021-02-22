@@ -22,9 +22,9 @@ namespace TableDriver.Elements
 
         internal TableCell(IWebElement element, int columnIndex, int skipRows)
         {
-            if (element.TagName.ToUpperInvariant() != "TD")
+            if (element.TagName.ToUpperInvariant() != "TH" && element.TagName.ToUpperInvariant() != "TD")
             {
-                throw new ArgumentException("Must specify a <td> element.", nameof(element));
+                throw new ArgumentException("Must specify a <td> or a <th> element.", nameof(element));
             }
 
             this.Element = element;

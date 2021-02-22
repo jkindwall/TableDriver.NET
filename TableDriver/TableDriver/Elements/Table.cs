@@ -36,7 +36,7 @@ namespace TableDriver.Elements
                 return (theadRows.Last(), 0);
             }
 
-            IList<IWebElement> thRows = element.FindElements(By.XPath("tbody/tr[th] | tr[th]"));
+            IList<IWebElement> thRows = element.FindElements(By.XPath("tbody/tr[th and not(td)] | tr[th and not(td)]"));
             if (thRows.Any())
             {
                 return (thRows.Last(), thRows.Count());
@@ -71,7 +71,7 @@ namespace TableDriver.Elements
             if (this.HeaderRow == null)
             {
                 IList<IWebElement> columns = this.Element.FindElements(
-                    By.XPath($"{this.RowXPathPrefix}[1]/th | {this.RowXPathPrefix}[1]/td"));
+                    By.XPath($"{this.RowXPathPrefix}[1]/*[self::th or self::td]"));
                 for (int i = 0; i < columns.Count; i++)
                 {
                     string indexText = i.ToString();
@@ -214,7 +214,7 @@ namespace TableDriver.Elements
         {
             string rowXPath = this.BuildXPath(rowQuery);
             int xpathCellIndex = columnIndex + 1;
-            string cellXPath = $"({rowXPath})/td[{xpathCellIndex}]";
+            string cellXPath = $"({rowXPath})/*[self::th or self::td][{xpathCellIndex}]";
             IWebElement cellElement = this.Element.FindElement(By.XPath(cellXPath));
             return new TableCell(cellElement, columnIndex, this.SkipRows);
         }
@@ -247,7 +247,7 @@ namespace TableDriver.Elements
         {
             string rowXPath = this.BuildXPath(rowIndex);
             int xpathCellIndex = columnIndex + 1;
-            string cellXPath = $"({rowXPath})/td[{xpathCellIndex}]";
+            string cellXPath = $"({rowXPath})/*[self::th or self::td][{xpathCellIndex}]";
             IWebElement cellElement = this.Element.FindElement(By.XPath(cellXPath));
             return new TableCell(cellElement, columnIndex, this.SkipRows);
         }
@@ -280,7 +280,7 @@ namespace TableDriver.Elements
         {
             string rowXPath = this.BuildXPath(rowQuery);
             int xpathCellIndex = columnIndex + 1;
-            string cellXPath = $"({rowXPath})/td[{xpathCellIndex}]";
+            string cellXPath = $"({rowXPath})/*[self::th or self::td][{xpathCellIndex}]";
             IList<TableCell> tableCells = this.Element
                 .FindElements(By.XPath(cellXPath))
                 .Select((e, i) => new TableCell(e, i, this.SkipRows))
@@ -329,7 +329,7 @@ namespace TableDriver.Elements
                     nameof(fieldCondition));
             }
 
-            return $"[td[{xpathHeaderIndex}]=\"{fieldCondition.Value}\"]";
+            return $"[*[self::th or self::td][{xpathHeaderIndex}]=\"{fieldCondition.Value}\"]";
         }
 
         /// <summary>
