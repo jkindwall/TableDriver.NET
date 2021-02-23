@@ -24,6 +24,7 @@ namespace TableDriver.Tests
             Assert.AreEqual(tableId, table.Element.GetAttribute("id"));
             Assert.AreEqual("tr", table.HeaderRow.TagName);
             Assert.AreEqual("headerRow", table.HeaderRow.GetAttribute("name"));
+            Assert.IsNull(table.HeaderElements);
         }
 
         protected void TestGetRows()
@@ -323,6 +324,12 @@ namespace TableDriver.Tests
             }
             catch (NoSuchElementException)
             {
+                if (table.HeaderRow == null) { throw; }
+                exceptionThrown = true;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                if (table.HeaderElements == null) { throw; }
                 exceptionThrown = true;
             }
             Assert.IsTrue(exceptionThrown);

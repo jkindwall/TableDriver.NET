@@ -6,23 +6,23 @@ namespace TableDriver.Tests
 {
     [TestClass]
     [DeploymentItem(TableSamples.TestPage)]
-    public class CustomHeaderRowInTBODYTableTests : TableTestsBase
+    public class ExternalHeadersInTBODYTableTests : ExternalHeadersTableTestsBase
     {
-        private const string TableId = "custom-header-row-in-tbody";
-        private const string HeaderCss = "#custom-header-row-in-tbody tr[name=headerRow]";
+        private const string TableId = "with-tbody-and-external-headers";
+        private const string HeaderCss = "#table-headers > span";
 
         protected override Table GetTestTable()
         {
-            return Table.CreateWithHeaderRow(
-                this.Driver.FindElement(By.Id(CustomHeaderRowInTBODYTableTests.TableId)),
-                this.Driver.FindElement(By.CssSelector(CustomHeaderRowInTBODYTableTests.HeaderCss)),
-                2);
+            return Table.CreateWithExternalHeaders(
+                this.Driver.FindElement(By.Id(ExternalHeadersInTBODYTableTests.TableId)),
+                this.Driver.FindElements(By.CssSelector(ExternalHeadersInTBODYTableTests.HeaderCss)),
+                0);
         }
 
         [TestMethod]
         public void CustomHeaderRowInTBODYTablePropertiesTest()
         {
-            this.TestTableProperties(CustomHeaderRowInTBODYTableTests.TableId);
+            this.TestTableProperties(ExternalHeadersInTBODYTableTests.TableId);
         }
 
         [TestMethod]

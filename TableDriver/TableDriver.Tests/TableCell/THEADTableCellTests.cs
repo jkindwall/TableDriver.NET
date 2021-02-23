@@ -12,7 +12,7 @@ namespace TableDriver.Tests
 
         protected override TableCell GetTestTableCell()
         {
-            Table table = new Table(this.Driver.FindElement(By.Id(THEADTableCellTests.TableId)));
+            Table table = Table.Create(this.Driver.FindElement(By.Id(THEADTableCellTests.TableId)));
             return table.FindCell(5, 1);
         }
 

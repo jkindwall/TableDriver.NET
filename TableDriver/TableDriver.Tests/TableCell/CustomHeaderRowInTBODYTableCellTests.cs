@@ -13,7 +13,7 @@ namespace TableDriver.Tests
 
         protected override TableCell GetTestTableCell()
         {
-            Table table = new Table(
+            Table table = Table.CreateWithHeaderRow(
                 this.Driver.FindElement(By.Id(CustomHeaderRowInTBODYTableCellTests.TableId)),
                 this.Driver.FindElement(By.CssSelector(CustomHeaderRowInTBODYTableCellTests.HeaderCss)),
                 2);

@@ -12,10 +12,7 @@ namespace TableDriver.Tests
 
         protected override TableRow GetTestTableRow()
         {
-            Table table = new Table(
-                this.Driver.FindElement(By.Id(NoHeaderTableRowTests.TableId)),
-                null,
-                0);
+            Table table = Table.CreateWithNoHeaders(this.Driver.FindElement(By.Id(NoHeaderTableRowTests.TableId)), 0);
             return table.FindRow(10);
         }
 

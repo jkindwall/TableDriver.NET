@@ -19,6 +19,7 @@ namespace TableDriver.Tests
             Assert.AreEqual("table", table.Element.TagName);
             Assert.AreEqual(tableId, table.Element.GetAttribute("id"));
             Assert.IsNull(table.HeaderRow);
+            Assert.IsNull(table.HeaderElements);
         }
 
         protected new void TestFindRow()

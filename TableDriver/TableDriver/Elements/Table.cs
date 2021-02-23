@@ -28,6 +28,11 @@ namespace TableDriver.Elements
         /// </summary>
         public IWebElement? HeaderRow { get; private init; }
 
+        /// <summary>
+        /// Collection of IWebElements representing header elements not contained within the main table element.
+        /// </summary>
+        public IReadOnlyList<IWebElement>? HeaderElements { get; private init; }
+
         private static (IWebElement HeaderRow, int SkipRows) TryFindHeaderRow(IWebElement element)
         {
             IList<IWebElement> theadRows = element.FindElements(By.XPath("thead/tr"));
@@ -67,8 +72,20 @@ namespace TableDriver.Elements
 
         private IDictionary<string, int> LoadHeaders()
         {
+            IReadOnlyList<IWebElement>? headerElements = this.HeaderRow != null
+                ? this.HeaderRow.FindElements(By.XPath("th | td"))
+                : this.HeaderElements;
+
             Dictionary<string, int> headers = new();
-            if (this.HeaderRow == null)
+            if (headerElements != null)
+            {
+                int columnIndex = 0;
+                foreach (IWebElement headerElement in headerElements)
+                {
+                    headers[headerElement.Text] = columnIndex++;
+                }
+            }
+            else
             {
                 IList<IWebElement> columns = this.Element.FindElements(
                     By.XPath($"{this.RowXPathPrefix}[1]/*[self::th or self::td]"));
@@ -76,15 +93,6 @@ namespace TableDriver.Elements
                 {
                     string indexText = i.ToString();
                     headers[indexText] = i;
-                }
-            }
-            else
-            {
-                IList<IWebElement> headerElements = this.HeaderRow.FindElements(By.XPath("td | th"));
-                int columnIndex = 0;
-                foreach (IWebElement headerElement in headerElements)
-                {
-                    headers[headerElement.Text] = columnIndex++;
                 }
             }
 
@@ -96,26 +104,59 @@ namespace TableDriver.Elements
         /// </summary>
         /// <param name="element">IWebElement representing the "table" element</param>
         /// <remarks>The Table class will attempt to infer the structure of the table based on a few standard table layouts.
-        /// If this does not work, try using the more specific constructor which specifies the header row and skip rows value.</remarks>
-        public Table(IWebElement element)
-            : this(element, Table.TryFindHeaderRow(element))
+        /// If this does not work, try using one of the alternative Create methods that allow you to specify how to handle table headers.</remarks>
+        /// <returns>The new Table instance</returns>
+        public static Table Create(IWebElement element)
         {
-        }
-
-        private Table(IWebElement element, (IWebElement HeaderRow, int SkipRows) tryFindResults)
-            : this(element, tryFindResults.HeaderRow, tryFindResults.SkipRows)
-        {
+            (IWebElement headerRow, int skipRows) = Table.TryFindHeaderRow(element);
+            return new Table(element, headerRow, null, skipRows);
         }
 
         /// <summary>
         /// Crates a new instance of the Table class based on the specified "table" element
         /// </summary>
         /// <param name="element">IWebElement representing the "table" element</param>
-        /// <param name="headerRowElement">IWebElement representing the header row of the table.  If the table has no column headers, pass null
-        /// to this parameter.  In this case, columns will only be addressable by index.</param>
+        /// <param name="headerRowElement">IWebElement representing the header row of the table.</param>
+        /// <param name="skipRows">The number of rows at the top of the table body that do not represent the table content 
+        /// (usually because they contain a title row or column headers)</param>
+        /// <returns>The new Table instance</returns>
+        public static Table CreateWithHeaderRow(IWebElement element, IWebElement headerRowElement, int skipRows)
+        {
+            return new Table(element, headerRowElement, null, skipRows);
+        }
+
+        /// <summary>
+        /// Crates a new instance of the Table class based on the specified "table" element, where the column headers are located outside
+        /// the table tag.  Use this Create method for situatoins where the table headers are contained in a separate table element or
+        /// some other type of container external to the main table element.
+        /// </summary>
+        /// <param name="element">IWebElement representing the "table" element</param>
+        /// <param name="headerElements">Collection of IWebElements representing column headers that are not contained within the specified 
+        /// table element.</param>
         /// <param name="skipRows">The number of rows at the top of the table body that do not represent the table content 
         /// (usually because they contain column headers)</param>
-        public Table(IWebElement element, IWebElement? headerRowElement, int skipRows)
+        /// <returns>The new Table instance</returns>
+        public static Table CreateWithExternalHeaders(IWebElement element, IReadOnlyList<IWebElement> headerElements, int skipRows)
+        {
+            return new Table(element, null, headerElements, skipRows);
+        }
+
+        /// <summary>
+        /// Creates a new instance of the Table class based on the specified "table" element, with no displayed column headers.  Table
+        /// instances created with this method will only allow specifying columns by their numeric index.
+        /// </summary>
+        /// <param name="element">IWebElement representing the "table" element</param>
+        /// <param name="headerElements">Collection of IWebElements representing column headers that are not contained within the specified 
+        /// table element.</param>
+        /// <param name="skipRows">The number of rows at the top of the table body that do not represent the table content 
+        /// (usually because they contain column headers)</param>
+        /// <returns>The new Table instance</returns>
+        public static Table CreateWithNoHeaders(IWebElement element, int skipRows)
+        {
+            return new Table(element, null, null, skipRows);
+        }
+
+        private Table(IWebElement element, IWebElement? headerRowElement, IReadOnlyList<IWebElement>? headerElements, int skipRows)
         {
             if (element.TagName.ToUpperInvariant() != "TABLE")
             {
@@ -129,6 +170,7 @@ namespace TableDriver.Elements
 
             this.Element = element;
             this.HeaderRow = headerRowElement;
+            this.HeaderElements = headerElements;
             this.SkipRows = skipRows;
             this.RowXPathPrefix = Table.BuildRowXPathPrefix(element, skipRows);
             this.Headers = new ReadOnlyDictionary<string, int>(this.LoadHeaders());
@@ -361,7 +403,7 @@ namespace TableDriver.Elements
         /// <returns>IWebElement representing the specified column header</returns>
         public IWebElement GetHeader(string headerText)
         {
-            if (this.HeaderRow == null)
+            if (this.HeaderRow == null && this.HeaderElements == null)
             {
                 throw new InvalidOperationException("This table does not have identified column headers.");
             }
@@ -383,13 +425,17 @@ namespace TableDriver.Elements
         /// <returns>IWebElement representing the specified column header</returns>
         public IWebElement GetHeader(int headerIndex)
         {
-            if (this.HeaderRow == null)
+            if (this.HeaderRow != null)
             {
-                throw new InvalidOperationException("This table does not have identified column headers.");
+                int xpathIndex = headerIndex + 1;
+                return this.HeaderRow.FindElement(By.XPath($"(td | th)[{xpathIndex}]"));
+            }
+            else if (this.HeaderElements != null)
+            {
+                return this.HeaderElements[headerIndex];
             }
 
-            int xpathIndex = headerIndex + 1;
-            return this.HeaderRow.FindElement(By.XPath($"(td | th)[{xpathIndex}]"));
+            throw new InvalidOperationException("This table does not have identified column headers.");
         }
     }
 }

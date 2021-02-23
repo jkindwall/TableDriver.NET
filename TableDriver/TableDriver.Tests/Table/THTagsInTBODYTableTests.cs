@@ -12,7 +12,7 @@ namespace TableDriver.Tests
 
         protected override Table GetTestTable()
         {
-            return new Table(this.Driver.FindElement(By.Id(THTagsInTBODYTableTests.TableId)));
+            return Table.Create(this.Driver.FindElement(By.Id(THTagsInTBODYTableTests.TableId)));
         }
 
         [TestMethod]
