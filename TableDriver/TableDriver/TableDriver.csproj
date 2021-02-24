@@ -5,8 +5,15 @@
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>TableDriver.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>TableDriver.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <PackageId>TableDriver.NET</PackageId>
+    <Authors>Jesse Kindwall</Authors>
+    <Product>TableDriver.NET</Product>
+    <Description>An extension to .NET Selenium WebDriver to support operations on HTML tables.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageTags>selenium webdriver test automation table dotnet c#</PackageTags>
+    <PackageProjectUrl>https://github.com/jkindwall/TableDriver.NET</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
