@@ -170,3 +170,36 @@ public TableCell FindCell(string rowQuery, int columnIndex);
 public ReadOnlyCollection<TableCell> FindCells(string rowQuery, string columnHeaderText);
 public ReadOnlyCollection<TableCell> FindCells(string rowQuery, int columnIndex);
 ```
+
+## Not Supported
+
+### colspan > 1
+If any \<th\> or \<td\> elements in the header row or the data rows specify a colspan attribute with a value other than 1, it may cause unpredictable results when using TableDriver.  The Table object assumes that the header row and all data rows in a table have exactly the same number of cells.  Colspan cells may throw off the 1:1 matching of column headers to row cells.  If the only such cells in the table are in rows not considered part of the content area and are not part of the header row (such as the title row found in several of the above example tables) this should not pose a problem for the TableDriver Table object.
+
+### Footers
+TableDriver currently does not support any operations specific to table footers.  If a table includes footer rows completely contained within a \<tfoot\> tag, these footer rows will simply be ignored.  If, however, a table contains footer rows within the \<tbody\> tag or as direct children of the \<table\> tag when no \<tbody\> tag is present, these rows will be considered part of the table's content region and will be considered by calls to methods and properties like RowCount and FindRow, so tests on tables with this type of footer row should take this into account.
+
+### Duplicate Headers
+If a table has more than one column with the same text in its header row, several TableDriver methods may produce invalid results.
+
+## To Do
+The following features are being considered to be supported in the future:
+
+### Additional field condition operators
+The following operators will likely be implemented in the future as alternatives to the '=' operator in row queries:
+- \< (less than)
+- \> (greater than)
+- \<= (less than or equal)
+- \>= (greater than or equal)
+- != (not equeal)
+- ^= (starts with)
+- *= (contains)
+
+### Support duplicate headers
+This will likely be addressed by appending some sort of index to all headers past the first one with identical text.  Something like "Name", "Name-1", "Name-2".
+
+### Table contents verification.
+I'd like to implement some sort of method for doing mass verification of part or all of the data in a table.  The tricky part is figuring out the best way to communicate the verification results.
+
+### Support other languages
+I will very likely port this package to Java at some point in the near future.  A javascript version is also a possibility.  However, my experience with other languages supported by Selenium (Python, Perl, PHP, Ruby) is limited, making those far less likely at the moment.  However, I fully support anyone interested in implementing their own ports to one of those languages.
