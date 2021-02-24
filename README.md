@@ -61,7 +61,7 @@ If no \<thead\> is found, it will look for any \<tr\> elements that only contain
     </table>
 ```
 
-If no \<thead\> element is found, and there are no \<tr\> elements that only contain \<th\> elements, the basic Create() method will finally resort to assuming that the first \<tr\> element in the table contains the column headers.  Header values will be read from the first row, and that row will be excluded from the "content" region of the table.  This would be applicable to a table structured like this:
+If no \<thead\> element is found, and there are no \<tr\> elements that only contain \<th\> elements, the basic Create(...) method will finally resort to assuming that the first \<tr\> element in the table contains the column headers.  Header values will be read from the first row, and that row will be excluded from the "content" region of the table.  This would be applicable to a table structured like this:
 
 ``` html
     <table id="myTable">
@@ -82,7 +82,7 @@ Table table = Table.CreateWithHeaderRow(
     2);
 ```
 
-If the simple Create() method is incapable of automatically identifying the header row in your table, you can use the CreateWithHeaderRow(...) to explicitly identify the header row.  You can also specify how many rows at the top of your table should not be considered part of the content region (data rows) in your table using the skipRows parameter.  The above call to CreateWithHeaderRow(...) would be appropriate for a table like this one:
+If the simple Create(...) method is incapable of automatically identifying the header row in your table, you can use the CreateWithHeaderRow(...) to explicitly identify the header row.  You can also specify how many rows at the top of your table should not be considered part of the content region (data rows) in your table using the skipRows parameter.  The above call to CreateWithHeaderRow(...) would be appropriate for a table like this one:
 
 ``` html
     <table id="myTable">
@@ -163,10 +163,10 @@ Table driver supports the following escape sequences in order to support includi
 ### Supporting Methods
 The following methods of the Table class support the use of row queries to identify one or more rows in the table:
 ``` csharp
-public TableRow FindRow(string rowQuery)
-public ReadOnlyCollection<TableRow> FindRows(string rowQuery)
-public TableCell FindCell(string rowQuery, string columnHeaderText)
-public TableCell FindCell(string rowQuery, int columnIndex)
-public ReadOnlyCollection<TableCell> FindCells(string rowQuery, string columnHeaderText)
-public ReadOnlyCollection<TableCell> FindCells(string rowQuery, int columnIndex)
+public TableRow FindRow(string rowQuery);
+public ReadOnlyCollection<TableRow> FindRows(string rowQuery);
+public TableCell FindCell(string rowQuery, string columnHeaderText);
+public TableCell FindCell(string rowQuery, int columnIndex);
+public ReadOnlyCollection<TableCell> FindCells(string rowQuery, string columnHeaderText);
+public ReadOnlyCollection<TableCell> FindCells(string rowQuery, int columnIndex);
 ```
