@@ -13,7 +13,7 @@ steps:
   displayName: 'Restore NuGet Packages'
   inputs:
     command: 'restore'
-    projects: 'TableDriver/TableDriver/TableDriver.csproj'
+    projects: 'TableDriver/TableDriver.sln'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
@@ -22,6 +22,14 @@ steps:
     command: 'build'
     arguments: '--configuration $(buildConfiguration)'
     projects: 'TableDriver/TableDriver/TableDriver.csproj'
+
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*.Tests.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: "Pack"
