@@ -12,7 +12,7 @@ steps:
     pipeline: '6'
     buildVersionToDownload: 'latest'
     downloadType: 'specific'
-    itemPattern: '*.nupkg'
+    itemPattern: '**/*.nupkg'
     downloadPath: '$(System.DefaultWorkingDirectory)'
 
 - task: NuGetCommand@2
