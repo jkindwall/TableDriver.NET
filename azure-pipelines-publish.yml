@@ -18,6 +18,6 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'push'
-    packagesToPush: '$(System.DefaultWorkingDirectory)/*.nupkg'
+    packagesToPush: '$(System.DefaultWorkingDirectory)/**/*.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'NuGet.org'
