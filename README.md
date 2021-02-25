@@ -23,6 +23,24 @@ TableCell cell = table.FindCell("Product Id=ABC123", "Price")
 string price = cell.Element.Text;
 ```
 
+# Install
+Search for TableDriver.NET in the NuGet Package Manager in Visual Studio, or use you preferred command line tool to install the NuGet package.
+
+Package Manager Console:
+```
+Install-Package TableDriver.NET
+```
+
+.NET CLI
+```
+dotnet add package TableDriver.NET
+```
+
+nuget.exe
+```
+nuget install TableDriver.NET
+```
+
 # Usage
 ## Creating the Table object
 While the somewhat open-ended nature of the structure of the html table tag makes it difficult to support every possible table implementation, TableDriver strives to support several of the most common table structures and offers several versions of the "Create" method allowing you to specify how to interpret the table in your AUT.
