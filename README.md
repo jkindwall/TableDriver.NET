@@ -26,7 +26,7 @@ string price = cell.Element.Text;
 # Install
 Search for TableDriver.NET in the NuGet Package Manager in Visual Studio, or use you preferred command line tool to install the NuGet package.
 
-Package Manager Console:
+Package Manager Console
 ```
 Install-Package TableDriver.NET
 ```
