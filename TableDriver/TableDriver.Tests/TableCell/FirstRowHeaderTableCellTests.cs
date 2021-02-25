@@ -6,6 +6,8 @@ namespace TableDriver.Tests
 {
     [TestClass]
     [DeploymentItem(TableSamples.TestPage)]
+    [DeploymentItem(@"bin\Release\chromedriver.exe")]
+    [DeploymentItem(@"bin\Release\geckodriver.exe")]
     public class FirstRowHeaderTableCellTests : TableCellTestsBase
     {
         private const string TableId = "first-row-headers";

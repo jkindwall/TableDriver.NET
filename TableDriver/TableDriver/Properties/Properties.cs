@@ -1,8 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("TableDriver.Tests, PublicKey=" +
-    "0024000004800000940000000602000000240000525341310004000001000100d565549deeca66" +
-    "23b7ed00029a287c6dbe0bfa9efa787d3c0d580c2776089bf1f9bf8e06a9f16d04b53986d54151" +
-    "94d6b4caee9fe853a0e60bc22c521c4869a522cec7292696470a5902fd5552335638b99cb4d63d" +
-    "db6fe2cb55b54256d85a54091792aa72f50c3164601b255907cee7fb8cbb0c6fe9b3c032968d06" +
-    "dca8aab6")]
+[assembly:InternalsVisibleTo("TableDriver.Tests")]
