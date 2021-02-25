@@ -14,10 +14,20 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>selenium webdriver test automation table dotnet c#</PackageTags>
     <PackageProjectUrl>https://github.com/jkindwall/TableDriver.NET</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
