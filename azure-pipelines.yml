@@ -21,7 +21,7 @@ steps:
   inputs:
     command: 'build'
     arguments: '--configuration $(buildConfiguration)'
-    projects: 'TableDriver/TableDriver/TableDriver.csproj'
+    projects: 'TableDriver/TableDriver.sln'
 
 - task: VSTest@2
   inputs:
