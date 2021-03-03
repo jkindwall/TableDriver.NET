@@ -82,7 +82,14 @@ namespace TableDriver.Elements
                 int columnIndex = 0;
                 foreach (IWebElement headerElement in headerElements)
                 {
-                    headers[headerElement.Text] = columnIndex++;
+                    string headerText = headerElement.Text;
+                    int headerSuffix = 0;
+                    while (headers.ContainsKey(headerText))
+                    {
+                        headerText = $"{headerElement.Text}-{++headerSuffix}";
+                    }
+
+                    headers[headerText] = columnIndex++;
                 }
             }
             else
