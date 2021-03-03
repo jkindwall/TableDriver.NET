@@ -189,6 +189,13 @@ public ReadOnlyCollection<TableCell> FindCells(string rowQuery, string columnHea
 public ReadOnlyCollection<TableCell> FindCells(string rowQuery, int columnIndex);
 ```
 
+### Duplicate Headers
+In the case of a table that has multiple column headers with the same inner text, the columns will be differentiated anywhere column headers are referenced by appending a numeric index to each header after the first one.  For example, if a table has three column headers that all contain the text "Color", TableDriver will reference these columns as "Color", "Color-1", and "Color-2".  Example:
+``` csharp
+// Finds the cell in the third "Color" column from the row that has the text "Crimson" in the second "Color" column.
+TableCell cell = table.FindCell("Color-1=Crimson", "Color-2");
+```
+
 ## Not Supported
 
 ### colspan > 1
@@ -196,9 +203,6 @@ If any \<th\> or \<td\> elements in the header row or the data rows specify a co
 
 ### Footers
 TableDriver currently does not support any operations specific to table footers.  If a table includes footer rows completely contained within a \<tfoot\> tag, these footer rows will simply be ignored.  If, however, a table contains footer rows within the \<tbody\> tag or as direct children of the \<table\> tag when no \<tbody\> tag is present, these rows will be considered part of the table's content region and will be considered by calls to methods and properties like RowCount and FindRow, so tests on tables with this type of footer row should take this into account.
-
-### Duplicate Headers
-If a table has more than one column with the same text in its header row, several TableDriver methods may produce invalid results.
 
 ## To Do
 The following features are being considered to be supported in the future:
@@ -212,9 +216,6 @@ The following operators will likely be implemented in the future as alternatives
 - != (not equeal)
 - ^= (starts with)
 - *= (contains)
-
-### Support duplicate headers
-This will likely be addressed by appending some sort of index to all headers past the first one with identical text.  Something like "Name", "Name-1", "Name-2".
 
 ### Table contents verification.
 I'd like to implement some sort of method for doing mass verification of part or all of the data in a table.  The tricky part is figuring out the best way to communicate the verification results.
