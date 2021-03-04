@@ -22,45 +22,87 @@ namespace TableDriver.Tests
         }
 
         [TestMethod]
-        public void CustomHeaderRowInTBODYTablePropertiesTest()
+        public void ExternalHeadersRowInTBODYTablePropertiesTest()
         {
             this.TestTableProperties(ExternalHeadersInTBODYTableTests.TableId);
         }
 
         [TestMethod]
-        public void CustomHeaderRowInTBODYTableGetRowsTest()
+        public void ExternalHeadersInTBODYTableGetRowsTest()
         {
             this.TestGetRows();
         }
 
         [TestMethod]
-        public void CustomHeaderRowInTBODYTableFindRowTest()
+        public void ExternalHeadersInTBODYTableFindRowTest()
         {
             this.TestFindRow();
         }
 
         [TestMethod]
-        public void CustomHeaderRowInTBODYTableFindRowsTest()
+        public void ExternalHeadersInTBODYTableFindRowsTest()
         {
             this.TestFindRows();
         }
 
         [TestMethod]
-        public void CustomHeaderRowInTBODYTableFindCellTest()
+        public void ExternalHeadersInTBODYTableFindCellTest()
         {
             this.TestFindCell();
         }
 
         [TestMethod]
-        public void CustomHeaderRowInTBODYTableFindCellsTest()
+        public void ExternalHeadersInTBODYTableFindCellsTest()
         {
             this.TestFindCells();
         }
 
         [TestMethod]
-        public void CustomHeaderRowInTBODYTableGetHeaderTest()
+        public void ExternalHeadersInTBODYTableGetHeaderTest()
         {
             this.TestGetHeader();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersInTBODYTableNotEqualInRowQueryTest()
+        {
+            this.TestNotEqualInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersInTBODYTableLessThanInRowQueryTest()
+        {
+            this.TestLessThanInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersInTBODYTableLessThanOrEqualInRowQueryTest()
+        {
+            this.TestLessThanOrEqualInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersInTBODYTableGreaterThanInRowQueryTest()
+        {
+            this.TestGreaterThanInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersInTBODYTableGreaterThanOrEqualInRowQueryTest()
+        {
+            this.TestGreaterThanOrEqualInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersInTBODYTableStartsWithInRowQueryTest()
+        {
+            this.TestStartsWithInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersInTBODYTableContainsInRowQueryTest()
+        {
+            this.TestContainsInRowQuery();
         }
     }
 }

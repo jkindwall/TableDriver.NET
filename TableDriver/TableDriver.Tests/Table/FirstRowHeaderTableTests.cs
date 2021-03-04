@@ -58,5 +58,47 @@ namespace TableDriver.Tests
         {
             this.TestGetHeader();
         }
+
+        [TestMethod]
+        public void FirstRowHeaderTableNotEqualInRowQueryTest()
+        {
+            this.TestNotEqualInRowQuery();
+        }
+
+        [TestMethod]
+        public void FirstRowHeaderTableLessThanInRowQueryTest()
+        {
+            this.TestLessThanInRowQuery();
+        }
+
+        [TestMethod]
+        public void FirstRowHeaderTableLessThanOrEqualInRowQueryTest()
+        {
+            this.TestLessThanOrEqualInRowQuery();
+        }
+
+        [TestMethod]
+        public void FirstRowHeaderTableGreaterThanInRowQueryTest()
+        {
+            this.TestGreaterThanInRowQuery();
+        }
+
+        [TestMethod]
+        public void FirstRowHeaderTableGreaterThanOrEqualInRowQueryTest()
+        {
+            this.TestGreaterThanOrEqualInRowQuery();
+        }
+
+        [TestMethod]
+        public void FirstRowHeaderTableStartsWithInRowQueryTest()
+        {
+            this.TestStartsWithInRowQuery();
+        }
+
+        [TestMethod]
+        public void FirstRowHeaderTableContainsInRowQueryTest()
+        {
+            this.TestContainsInRowQuery();
+        }
     }
 }

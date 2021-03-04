@@ -150,10 +150,23 @@ Occasinally you may have a table that simply does not have any headers at all.  
 ### Basic Structure
 TableDriver uses a simple query syntax similar to a URL query string to locate specific rows in a table.  A row query consists of one or more field conditions separated by boolean AND (&) and OR (|) operators.
 
-A "field condition" consists of a field name (typically the header text of the corresponding column) followed by an '=' character followed by the expected value of the field:
+A "field condition" consists of a field name (typically the header text of the corresponding column) followed by a comparison operator (usually the '=' character) followed by a comparison value:
 ```
 Name=Apple
 ```
+
+The following operators are supported in a field condition:
+
+|Operator|Description|Example|
+|:--:|--|--|
+|= |equal|```Name=Apple```|
+|!=|not equal|```Color!=Orange```|
+|< |less than|```Price<2.99```|
+|<=|less than or equal|```Weight<=5```|
+|> |greater than|```Length>16.02```|
+|>=|greater than or equal|```Quantity>=12```|
+|^=|starts with|```Name^=Pine```|
+|*=|contains|```Name*=apefrui```|
 
 Multiple field conditions can be combined into a single Row query using boolean operators:
 ```
@@ -162,10 +175,10 @@ Color=Red&Rating=5.0|Name=Orange
 
 ### Order of Operations
 The order in which operators are evaluated in a Row Query is as follows:
-```
-= -> & -> |
-```
-
+1. =, !=, <, <=, >, >=, ^=, *=
+2. &
+3. |
+ 
 ### Field Name by Index
 Occasionally you may have a need to identify a column in your row query by index instead of by header text.  You can do this by starting the field name portion of your field condition with a backslash (\\), and following it with the 0-based numeric index of the column:
 ```
@@ -173,9 +186,9 @@ Occasionally you may have a need to identify a column in your row query by index
 ```
 
 ### Escape Sequences
-Table driver supports the following escape sequences in order to support including the special characters (\\, =, &, |) in the literal field name or expected value portions of a field condition:
+Table driver supports the following escape sequences in order to support including the special characters (\\, =, &, |, etc.) in the literal field name or expected value portions of a field condition:
 ```
-\\  \=  \&  \|
+\\  \=  \!  \<  \>  \^  \*  \&  \|
 ```
 
 ### Supporting Methods
@@ -198,24 +211,14 @@ TableCell cell = table.FindCell("Color-1=Crimson", "Color-2");
 
 ## Not Supported
 
-### colspan > 1
-If any \<th\> or \<td\> elements in the header row or the data rows specify a colspan attribute with a value other than 1, it may cause unpredictable results when using TableDriver.  The Table object assumes that the header row and all data rows in a table have exactly the same number of cells.  Colspan cells may throw off the 1:1 matching of column headers to row cells.  If the only such cells in the table are in rows not considered part of the content area and are not part of the header row (such as the title row found in several of the above example tables) this should not pose a problem for the TableDriver Table object.
+### colspan/rowspan > 1
+If any \<th\> or \<td\> elements in the header row or the data rows specify a colspan or rowspan attribute with a value other than 1, it may cause unpredictable results when using TableDriver.  The Table object assumes that the header row and all data rows in a table have exactly the same number of cells.  Colspan/rowspan cells may throw off the 1:1 matching of column headers to row cells.  If the only such cells in the table are in rows not considered part of the content area and are not part of the header row (such as the title row found in several of the above example tables) this should not pose a problem for the TableDriver Table object.
 
 ### Footers
 TableDriver currently does not support any operations specific to table footers.  If a table includes footer rows completely contained within a \<tfoot\> tag, these footer rows will simply be ignored.  If, however, a table contains footer rows within the \<tbody\> tag or as direct children of the \<table\> tag when no \<tbody\> tag is present, these rows will be considered part of the table's content region and will be considered by calls to methods and properties like RowCount and FindRow, so tests on tables with this type of footer row should take this into account.
 
 ## To Do
 The following features are being considered to be supported in the future:
-
-### Additional field condition operators
-The following operators will likely be implemented in the future as alternatives to the '=' operator in row queries:
-- \< (less than)
-- \> (greater than)
-- \<= (less than or equal)
-- \>= (greater than or equal)
-- != (not equeal)
-- ^= (starts with)
-- *= (contains)
 
 ### Table contents verification.
 I'd like to implement some sort of method for doing mass verification of part or all of the data in a table.  The tricky part is figuring out the best way to communicate the verification results.

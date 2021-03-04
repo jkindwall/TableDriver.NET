@@ -378,7 +378,12 @@ namespace TableDriver.Elements
                     nameof(fieldCondition));
             }
 
-            return $"[*[self::th or self::td][{xpathHeaderIndex}]=\"{fieldCondition.Value}\"]";
+            return fieldCondition.Operation switch
+            {
+                FieldOperation.StartsWith => $"[starts-with(*[self::th or self::td][{xpathHeaderIndex}],\"{fieldCondition.Value}\")]",
+                FieldOperation.Contains => $"[contains(*[self::th or self::td][{xpathHeaderIndex}],\"{fieldCondition.Value}\")]",
+                _ => $"[*[self::th or self::td][{xpathHeaderIndex}]{fieldCondition.Operation}\"{fieldCondition.Value}\"]"
+            };
         }
 
         /// <summary>

@@ -22,45 +22,87 @@ namespace TableDriver.Tests
         }
 
         [TestMethod]
-        public void CustomHeaderRowTablePropertiesTest()
+        public void ExternalHeadersTablePropertiesTest()
         {
             this.TestTableProperties(ExternalHeadersTableTests.TableId);
         }
 
         [TestMethod]
-        public void CustomHeaderRowTableGetRowsTest()
+        public void ExternalHeadersTableGetRowsTest()
         {
             this.TestGetRows();
         }
 
         [TestMethod]
-        public void CustomHeaderRowTableFindRowTest()
+        public void ExternalHeadersTableFindRowTest()
         {
             this.TestFindRow();
         }
 
         [TestMethod]
-        public void CustomHeaderRowTableFindRowsTest()
+        public void ExternalHeadersTableFindRowsTest()
         {
             this.TestFindRows();
         }
 
         [TestMethod]
-        public void CustomHeaderRowTableFindCellTest()
+        public void ExternalHeadersTableFindCellTest()
         {
             this.TestFindCell();
         }
 
         [TestMethod]
-        public void CustomHeaderRowTableFindCellsTest()
+        public void ExternalHeadersTableFindCellsTest()
         {
             this.TestFindCells();
         }
 
         [TestMethod]
-        public void CustomHeaderRowTableGetHeaderTest()
+        public void ExternalHeadersTableGetHeaderTest()
         {
             this.TestGetHeader();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersTableNotEqualInRowQueryTest()
+        {
+            this.TestNotEqualInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersTableLessThanInRowQueryTest()
+        {
+            this.TestLessThanInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersTableLessThanOrEqualInRowQueryTest()
+        {
+            this.TestLessThanOrEqualInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersTableGreaterThanInRowQueryTest()
+        {
+            this.TestGreaterThanInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersTableGreaterThanOrEqualInRowQueryTest()
+        {
+            this.TestGreaterThanOrEqualInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersTableStartsWithInRowQueryTest()
+        {
+            this.TestStartsWithInRowQuery();
+        }
+
+        [TestMethod]
+        public void ExternalHeadersTableContainsInRowQueryTest()
+        {
+            this.TestContainsInRowQuery();
         }
     }
 }

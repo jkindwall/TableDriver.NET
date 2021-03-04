@@ -303,5 +303,218 @@ namespace TableDriver.Tests
             }
             Assert.IsTrue(exceptionThrown);
         }
+
+        protected new void TestNotEqualInRowQuery()
+        {
+            TableSamples.GoToTestPage(this.Driver);
+            Table table = this.GetTestTable();
+
+            IList<TableRow> rows = table.FindRows("3!=No");
+            Assert.IsNotNull(rows);
+            Assert.AreEqual(3, rows.Count);
+            Assert.AreEqual("1", rows[0].Element.GetAttribute("name"));
+            Assert.AreEqual("2", rows[1].Element.GetAttribute("name"));
+            Assert.AreEqual("4", rows[2].Element.GetAttribute("name"));
+        }
+
+        protected new void TestLessThanInRowQuery()
+        {
+            TableSamples.GoToTestPage(this.Driver);
+            Table table = this.GetTestTable();
+
+            IList<TableRow> rows = table.FindRows("4<3");
+            Assert.IsNotNull(rows);
+            Assert.AreEqual(2, rows.Count);
+            Assert.AreEqual("2", rows[0].Element.GetAttribute("name"));
+            Assert.AreEqual("7", rows[1].Element.GetAttribute("name"));
+
+            rows = table.FindRows(@"\4<1");
+            Assert.IsNotNull(rows);
+            Assert.AreEqual(0, rows.Count);
+
+            rows = table.FindRows("4<Schmoop");
+            Assert.IsNotNull(rows);
+            Assert.AreEqual(0, rows.Count);
+
+            bool exceptionThrown = false;
+            try
+            {
+                table.FindRow(@"\1<8");
+            }
+            catch (NoSuchElementException)
+            {
+                exceptionThrown = true;
+            }
+            Assert.IsTrue(exceptionThrown);
+        }
+
+        protected new void TestLessThanOrEqualInRowQuery()
+        {
+            TableSamples.GoToTestPage(this.Driver);
+            Table table = this.GetTestTable();
+
+            IList<TableCell> cells = table.FindCells(@"\4<=3.2", 0);
+            Assert.IsNotNull(cells);
+            Assert.AreEqual(3, cells.Count);
+            Assert.AreEqual("Grapefruit", cells[0].Element.Text);
+            Assert.AreEqual("Strawberry", cells[1].Element.Text);
+            Assert.AreEqual("Watermelon", cells[2].Element.Text);
+
+            bool exceptionThrown = false;
+            try
+            {
+                table.FindCell("4<=1.1", 0);
+            }
+            catch (NoSuchElementException)
+            {
+                exceptionThrown = true;
+            }
+            Assert.IsTrue(exceptionThrown);
+
+            cells = table.FindCells(@"\4<=Floofy", 0);
+            Assert.IsNotNull(cells);
+            Assert.AreEqual(0, cells.Count);
+
+            cells = table.FindCells("2<=90", 0);
+            Assert.IsNotNull(cells);
+            Assert.AreEqual(0, cells.Count);
+        }
+
+        protected new void TestGreaterThanInRowQuery()
+        {
+            TableSamples.GoToTestPage(this.Driver);
+            Table table = this.GetTestTable();
+
+            IList<TableRow> rows = table.FindRows("4>7");
+            Assert.IsNotNull(rows);
+            Assert.AreEqual(5, rows.Count);
+            Assert.AreEqual("3", rows[0].Element.GetAttribute("name"));
+            Assert.AreEqual("4", rows[1].Element.GetAttribute("name"));
+            Assert.AreEqual("9", rows[2].Element.GetAttribute("name"));
+            Assert.AreEqual("10", rows[3].Element.GetAttribute("name"));
+            Assert.AreEqual("11", rows[4].Element.GetAttribute("name"));
+
+            rows = table.FindRows(@"\4>100");
+            Assert.IsNotNull(rows);
+            Assert.AreEqual(0, rows.Count);
+
+            bool exceptionThrown = false;
+            try
+            {
+                table.FindRow("4>_____T+++");
+            }
+            catch (NoSuchElementException)
+            {
+                exceptionThrown = true;
+            }
+            Assert.IsTrue(exceptionThrown);
+
+            Assert.IsTrue(exceptionThrown);
+            rows = table.FindRows(@"\0>3");
+            Assert.IsNotNull(rows);
+            Assert.AreEqual(0, rows.Count);
+        }
+
+        protected new void TestGreaterThanOrEqualInRowQuery()
+        {
+            TableSamples.GoToTestPage(this.Driver);
+            Table table = this.GetTestTable();
+
+            IList<TableCell> cells = table.FindCells(@"\4>=7.7", 0);
+            Assert.IsNotNull(cells);
+            Assert.AreEqual(4, cells.Count);
+            Assert.AreEqual("Grape", cells[0].Element.Text);
+            Assert.AreEqual("Pineapple", cells[1].Element.Text);
+            Assert.AreEqual("Mangosteen", cells[2].Element.Text);
+            Assert.AreEqual("Lychee", cells[3].Element.Text);
+
+            cells = table.FindCells("4>=12.2", 0);
+            Assert.IsNotNull(cells);
+            Assert.AreEqual(0, cells.Count);
+
+            cells = table.FindCells(@"\4>=Six", 0);
+            Assert.IsNotNull(cells);
+            Assert.AreEqual(0, cells.Count);
+
+            bool exceptionThrown = false;
+            try
+            {
+                table.FindCell("3>=4.2", 0);
+            }
+            catch (NoSuchElementException)
+            {
+                exceptionThrown = true;
+            }
+            Assert.IsTrue(exceptionThrown);
+        }
+
+        protected new void TestStartsWithInRowQuery()
+        {
+            TableSamples.GoToTestPage(this.Driver);
+            Table table = this.GetTestTable();
+
+            IList<TableRow> rows = table.FindRows("0^=Mango");
+            Assert.IsNotNull(rows);
+            Assert.AreEqual(2, rows.Count);
+            Assert.AreEqual("9", rows[0].Element.GetAttribute("name"));
+            Assert.AreEqual("10", rows[1].Element.GetAttribute("name"));
+
+            rows = table.FindRows(@"\0^=ape");
+            Assert.IsNotNull(rows);
+            Assert.AreEqual(0, rows.Count);
+
+            bool exceptionThrown = false;
+            try
+            {
+                table.FindRow("1^=Big");
+            }
+            catch (NoSuchElementException)
+            {
+                exceptionThrown = true;
+            }
+            Assert.IsTrue(exceptionThrown);
+        }
+
+        protected new void TestContainsInRowQuery()
+        {
+            TableSamples.GoToTestPage(this.Driver);
+            Table table = this.GetTestTable();
+
+            IList<TableCell> cells = table.FindCells(@"\0*=Grape", 4);
+            Assert.IsNotNull(cells);
+            Assert.AreEqual(2, cells.Count);
+            Assert.AreEqual("2.8", cells[0].Element.Text);
+            Assert.AreEqual("7.8", cells[1].Element.Text);
+
+            cells = table.FindCells("1*=l", 0);
+            Assert.IsNotNull(cells);
+            Assert.AreEqual(5, cells.Count);
+            Assert.AreEqual("Grapefruit", cells[0].Element.Text);
+            Assert.AreEqual("Grape", cells[1].Element.Text);
+            Assert.AreEqual("Pineapple", cells[2].Element.Text);
+            Assert.AreEqual("Blueberry", cells[3].Element.Text);
+            Assert.AreEqual("Mango", cells[4].Element.Text);
+
+            cells = table.FindCells(@"\0*=berry", 1);
+            Assert.IsNotNull(cells);
+            Assert.AreEqual(2, cells.Count);
+            Assert.AreEqual("Blue", cells[0].Element.Text);
+            Assert.AreEqual("Red", cells[1].Element.Text);
+
+            bool exceptionThrown = false;
+            try
+            {
+                table.FindCell("0*=q", 0);
+            }
+            catch (NoSuchElementException)
+            {
+                exceptionThrown = true;
+            }
+            Assert.IsTrue(exceptionThrown);
+
+            cells = table.FindCells(@"\0*=Snapple", 3);
+            Assert.IsNotNull(cells);
+            Assert.AreEqual(0, cells.Count);
+        }
     }
 }
