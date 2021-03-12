@@ -2,9 +2,6 @@
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using TableDriver.Elements;
 
 namespace TableDriver.Tests

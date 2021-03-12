@@ -10,7 +10,7 @@ namespace TableDriver.Tests
     [DeploymentItem(@"bin\Release\geckodriver.exe")]
     public class NoHeaderTableCellTests : TableCellTestsBase
     {
-        private const string TableId = "no-headers-in-tbody";
+        private const string TableId = "no-headers";
 
         protected override TableCell GetTestTableCell()
         {
