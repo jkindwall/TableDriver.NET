@@ -409,7 +409,6 @@ namespace TableDriver.Tests
             }
             Assert.IsTrue(exceptionThrown);
 
-            Assert.IsTrue(exceptionThrown);
             rows = table.FindRows(@"\0>3");
             Assert.IsNotNull(rows);
             Assert.AreEqual(0, rows.Count);
