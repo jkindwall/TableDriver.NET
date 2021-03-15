@@ -14,7 +14,7 @@ namespace TableDriver.Elements
         public int ColumnIndex { get; private init; }
 
         /// <summary>
-        /// IWebElement representing the "td" element
+        /// IWebElement representing the "td" or "th" element
         /// </summary>
         public IWebElement Element { get; private init; }
 

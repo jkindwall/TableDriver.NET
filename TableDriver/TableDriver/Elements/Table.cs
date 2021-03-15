@@ -107,7 +107,7 @@ namespace TableDriver.Elements
         }
 
         /// <summary>
-        /// Crates a new instance of the Table class based on the specified "table" element
+        /// Creates a new instance of the Table class based on the specified "table" element
         /// </summary>
         /// <param name="element">IWebElement representing the "table" element</param>
         /// <remarks>The Table class will attempt to infer the structure of the table based on a few standard table layouts.
@@ -120,7 +120,7 @@ namespace TableDriver.Elements
         }
 
         /// <summary>
-        /// Crates a new instance of the Table class based on the specified "table" element
+        /// Creates a new instance of the Table class based on the specified "table" element
         /// </summary>
         /// <param name="element">IWebElement representing the "table" element</param>
         /// <param name="headerRowElement">IWebElement representing the header row of the table.</param>
@@ -133,7 +133,7 @@ namespace TableDriver.Elements
         }
 
         /// <summary>
-        /// Crates a new instance of the Table class based on the specified "table" element, where the column headers are located outside
+        /// Creates a new instance of the Table class based on the specified "table" element, where the column headers are located outside
         /// the table tag.  Use this Create method for situatoins where the table headers are contained in a separate table element or
         /// some other type of container external to the main table element.
         /// </summary>
@@ -141,7 +141,7 @@ namespace TableDriver.Elements
         /// <param name="headerElements">Collection of IWebElements representing column headers that are not contained within the specified 
         /// table element.</param>
         /// <param name="skipRows">The number of rows at the top of the table body that do not represent the table content 
-        /// (usually because they contain column headers)</param>
+        /// (usually because they containa title row or column headers)</param>
         /// <returns>The new Table instance</returns>
         public static Table CreateWithExternalHeaders(IWebElement element, IReadOnlyList<IWebElement> headerElements, int skipRows)
         {
@@ -153,10 +153,8 @@ namespace TableDriver.Elements
         /// instances created with this method will only allow specifying columns by their numeric index.
         /// </summary>
         /// <param name="element">IWebElement representing the "table" element</param>
-        /// <param name="headerElements">Collection of IWebElements representing column headers that are not contained within the specified 
-        /// table element.</param>
         /// <param name="skipRows">The number of rows at the top of the table body that do not represent the table content 
-        /// (usually because they contain column headers)</param>
+        /// (usually because they contain a title row or column headers)</param>
         /// <returns>The new Table instance</returns>
         public static Table CreateWithNoHeaders(IWebElement element, int skipRows)
         {

@@ -224,4 +224,4 @@ The following features are being considered to be supported in the future:
 I'd like to implement some sort of method for doing mass verification of part or all of the data in a table.  The tricky part is figuring out the best way to communicate the verification results.
 
 ### Support other languages
-I will very likely port this package to Java at some point in the near future.  A javascript version is also a possibility.  However, my experience with other languages supported by Selenium (Python, Perl, PHP, Ruby) is limited, making those far less likely at the moment.  However, I fully support anyone interested in implementing their own ports to one of those languages.
+The Java version of this package can be found [here](https://github.com/jkindwall/TableDriver.Java).  I may implement a javascript version at some point.   However, my experience with other languages supported by Selenium (Python, Perl, PHP, Ruby) is limited, making those far less likely at the moment.  However, I fully support anyone interested in implementing their own ports to one of those languages.
